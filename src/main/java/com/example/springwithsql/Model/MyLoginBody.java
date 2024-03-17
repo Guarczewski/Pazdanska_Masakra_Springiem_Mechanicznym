@@ -1,4 +1,4 @@
-package com.example.springwithsql;
+package com.example.springwithsql.Model;
 
 public class MyLoginBody {
     String username;

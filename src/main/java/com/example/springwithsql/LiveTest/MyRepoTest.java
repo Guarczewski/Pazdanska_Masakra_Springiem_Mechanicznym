@@ -1,4 +1,4 @@
-package com.example.springwithsql;
+package com.example.springwithsql.LiveTest;
 
 import com.example.springwithsql.Entity.Message;
 import com.example.springwithsql.Entity.User;

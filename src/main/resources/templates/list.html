@@ -6,6 +6,12 @@
 </head>
 <body>
 
+<form action="#" th:action="@{/submit}" th:object="${message}" method="post">
+    <label for="content">Treść:</label>
+    <input type="text" id="content" name="content" th:field="*{content}"><br>
+    <button type="submit">Wyślij</button>
+</form>
+
 <table class="table table-bordered">
     <thead>
     <tr class="active">

@@ -1,4 +1,4 @@
-package com.example.springwithsql;
+package com.example.springwithsql.Entity;
 
 import jakarta.persistence.*;
 
@@ -10,13 +10,13 @@ import java.util.Base64;
 public class User {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    public int id;
+    public int userID;
     public String name;
     public String password;
     public int age;
 
     public User(){
-        this.id = 0;
+        this.userID = 0;
         this.age = 0;
         this.name = "NULL";
         this.password = "NULL";
