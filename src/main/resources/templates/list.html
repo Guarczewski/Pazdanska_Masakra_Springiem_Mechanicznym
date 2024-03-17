@@ -1,0 +1,30 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>User List</title>
+</head>
+<body>
+
+<table class="table table-bordered">
+    <thead>
+    <tr class="active">
+        <th>Imię</th>
+        <th>Nazwisko</th>
+        <th>Wiek</th>
+    </tr>
+
+    </thead>
+    <tbody>
+    <tr th:each ="message : ${msgList}">
+
+        <td> <b  th:text="${message.messageID}">...</b> </td>
+        <td> <b  th:text="${message.creationTime}">...</b> </td>
+        <td> <b  th:text="${message.content}">...</b> </td>
+
+    </tr>
+    </tbody>
+</table>
+
+</body>
+</html>
