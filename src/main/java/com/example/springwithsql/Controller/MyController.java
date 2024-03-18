@@ -2,7 +2,7 @@ package com.example.springwithsql.Controller;
 
 import com.example.springwithsql.Entity.Message;
 import com.example.springwithsql.Repository.MyMessageRepository;
-import com.example.springwithsql.Repository.MyUserRepository;
+import com.example.springwithsql.Auth.MyUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;

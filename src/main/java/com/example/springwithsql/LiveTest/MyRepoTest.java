@@ -1,30 +1,34 @@
 package com.example.springwithsql.LiveTest;
 
+import com.example.springwithsql.Auth.Models.UserModel;
 import com.example.springwithsql.Entity.Message;
-import com.example.springwithsql.Entity.User;
+import com.example.springwithsql.Auth.Trash.MyUserDetails;
 import com.example.springwithsql.Repository.MyMessageRepository;
-import com.example.springwithsql.Repository.MyUserRepository;
+import com.example.springwithsql.Auth.MyUserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
 @Component
 public class MyRepoTest implements ApplicationRunner {
     private final MyUserRepository myUserRepository;
     private final MyMessageRepository myMessageRepository;
+    private final PasswordEncoder encoder;
 
     @Autowired
-    public MyRepoTest(MyUserRepository personRepository, MyMessageRepository myMessageRepository) {
+    public MyRepoTest(MyUserRepository personRepository, MyMessageRepository myMessageRepository, PasswordEncoder encoder) {
         this.myUserRepository = personRepository;
         this.myMessageRepository = myMessageRepository;
+        this.encoder = encoder;
     }
     public void run(ApplicationArguments args) {
         if (myUserRepository.findAll().isEmpty()) {
-            myUserRepository.save(new User("Jan", "Kowalski", 42));
-            myUserRepository.save(new User("Anna", "Burska", 32));
-            myUserRepository.save(new User("Marek", "Nowak", 45));
-            myUserRepository.save(new User("Julia", "Tarska", 37));
+            myUserRepository.save(new UserModel("Jan", encoder.encode("q"), "ROLE_ADMIN"));
+            myUserRepository.save(new UserModel("Anna", encoder.encode("q"), "ROLE_ADMIN"));
+            myUserRepository.save(new UserModel("Marek", encoder.encode("q"), "ROLE_ADMIN"));
+            myUserRepository.save(new UserModel("Julia", encoder.encode("q"), "ROLE_ADMIN"));
         }
 
         if (myMessageRepository.findAll().isEmpty()) {
