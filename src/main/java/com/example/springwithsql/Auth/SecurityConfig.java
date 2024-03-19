@@ -23,7 +23,10 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(AbstractHttpConfigurer::disable)
-                .authorizeHttpRequests((authorize) -> authorize.anyRequest().permitAll())
+                .authorizeHttpRequests(
+                        (authorize) -> authorize
+                                .requestMatchers("/api/**").hasRole("USER")
+                                .anyRequest().permitAll())
                 .userDetailsService(myUserDetailsService)
                 .httpBasic(Customizer.withDefaults()).build();
     }
