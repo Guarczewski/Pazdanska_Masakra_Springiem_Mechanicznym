@@ -1,32 +1,36 @@
-package com.example.springwithsql.Test;
+package com.example.springwithsql.Database.Entity;
 
 import jakarta.persistence.*;
 
 @Entity
-public class Person {
+public class Owner {
     @Id
     @GeneratedValue(strategy = GenerationType.AUTO)
-    protected int personID;
+    protected int clientID;
     protected String name;
     protected String surname;
+    protected String phoneNumber;
+    protected String emailAddress;
     @ManyToOne
     @JoinColumn(name = "addressID")
-    private Address address;
+    protected Address address;
 
-    public Person(){}
+    public Owner(){}
 
-    public Person(String name, String surname, Address address) {
+    public Owner(String name, String surname, String phoneNumber, String emailAddress, Address address) {
         this.name = name;
         this.surname = surname;
+        this.phoneNumber = phoneNumber;
+        this.emailAddress = emailAddress;
         this.address = address;
     }
 
     public int getPersonID() {
-        return personID;
+        return clientID;
     }
 
     public void setPersonID(int personID) {
-        this.personID = personID;
+        this.clientID = personID;
     }
 
     public String getName() {
@@ -45,6 +49,22 @@ public class Person {
         this.surname = surname;
     }
 
+    public String getPhoneNumber() {
+        return phoneNumber;
+    }
+
+    public void setPhoneNumber(String phoneNumber) {
+        this.phoneNumber = phoneNumber;
+    }
+
+    public String getEmailAddress() {
+        return emailAddress;
+    }
+
+    public void setEmailAddress(String emailAddress) {
+        this.emailAddress = emailAddress;
+    }
+
     public Address getAddress() {
         return address;
     }
@@ -53,3 +73,4 @@ public class Person {
         this.address = address;
     }
 }
+

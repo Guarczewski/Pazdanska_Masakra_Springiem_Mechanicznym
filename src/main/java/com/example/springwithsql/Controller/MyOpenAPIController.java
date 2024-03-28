@@ -3,7 +3,7 @@ package com.example.springwithsql.Controller;
 import com.example.springwithsql.Auth.Models.LoginModel;
 import com.example.springwithsql.Auth.Models.UserModel;
 import com.example.springwithsql.Auth.MyUserRepository;
-import com.example.springwithsql.Repository.MyMessageRepository;
+import com.example.springwithsql.Entity.MyMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
