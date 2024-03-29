@@ -1,5 +1,6 @@
 package com.example.springwithsql.Controller;
 
+import com.example.springwithsql.Database.Entity.Food;
 import com.example.springwithsql.Database.Entity.HorsePortions;
 import com.example.springwithsql.Database.Entity.Portions;
 import com.example.springwithsql.Controller.Model.HorseModel;
@@ -28,15 +29,56 @@ public class MyAPIController {
     private HorsePortionsRepository portionsRepository;
 
     // ================================================================================================================
+    // BASIC FOOD REQUESTS
+    // ================================================================================================================
+    @GetMapping("/api/Food/") // Fetch All
+    public ResponseEntity<List<Food>> getFood(){
+        return new ResponseEntity<>(foodRepository.findAll(), HttpStatus.OK);
+    }
+    @GetMapping("/api/Food/{id}") // Fetch One By ID
+    public ResponseEntity<Food> getFoodByID(@PathVariable Long id){
+        if (foodRepository.findById(id).isPresent()) {
+            return new ResponseEntity<>(foodRepository.findById(id).get(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/api/Food/")
+    public ResponseEntity<Food> addFood(@RequestBody Food food){
+        foodRepository.save(food);
+        return new ResponseEntity<>(food, HttpStatus.OK);
+    }
+    @PutMapping("/api/Food/{id}") // Update Existing
+    public ResponseEntity<Food> updateFoodByID(@PathVariable Long id, @RequestBody Food food){
+        if (foodRepository.findById(id).isPresent()) {
+            food.setId(id);
+            foodRepository.save(food);
+            return new ResponseEntity<>(food, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/api/Horse/{id}") // Delete One By ID
+    public ResponseEntity<Food> deleteFoodByID(@PathVariable Long id){
+        if (foodRepository.findById(id).isPresent()) {
+            foodRepository.deleteById(id);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    // ================================================================================================================
     // BASIC HORSE REQUESTS
     // ================================================================================================================
-
     @GetMapping("/api/Horse/") // Fetch All
     public ResponseEntity<List<Horse>> getHorse(){
-        return new ResponseEntity<>(horseRepository.findAll(), HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>(horseRepository.findAll(), HttpStatus.OK);
     }
     @GetMapping("/api/Horse/{id}") // Fetch One By ID
-    public ResponseEntity<Horse> getHorseById(@PathVariable Long id){
+    public ResponseEntity<Horse> getHorseByID(@PathVariable Long id){
         if (horseRepository.findById(id).isPresent()) {
             return new ResponseEntity<>(horseRepository.findById(id).get(), HttpStatus.OK);
         }
@@ -46,13 +88,8 @@ public class MyAPIController {
     }
     @PostMapping("/api/Horse/") // Add New
     public ResponseEntity<Horse> addHorse(@RequestBody Horse horse){
-        if (horseRepository.findById(horse.getId()).isPresent()) {
-            return new ResponseEntity<>(horse, HttpStatus.ALREADY_REPORTED);
-        }
-        else {
-            horseRepository.save(horse);
-            return new ResponseEntity<>(horse, HttpStatus.OK);
-        }
+        horseRepository.save(horse);
+        return new ResponseEntity<>(horse, HttpStatus.OK);
     }
     @PutMapping("/api/Horse/{id}") // Update Existing
     public ResponseEntity<Horse> updateHorseByID(@PathVariable Long id, @RequestBody Horse horse){
@@ -75,25 +112,11 @@ public class MyAPIController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-
     // ================================================================================================================
     //
     // ================================================================================================================
 
 
-    @GetMapping("/Test/")
-    public ResponseEntity<HorseModel> newHorse() {
-
-        Horse temp = horseRepository.findById(10L).get();
-
-        List<Portions> output = new ArrayList<>();
-
-        for (HorsePortions tmp : portionsRepository.findAllByHorseId(temp.getId())) {
-            output.add(tmp.getPortions());
-        }
-
-        return new ResponseEntity<>(new HorseModel(temp,output), HttpStatus.OK);
-    }
 
     @GetMapping("/api/error")
     public ResponseEntity<String> getError(){
