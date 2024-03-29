@@ -8,8 +8,8 @@ import jakarta.persistence.Id;
 @Entity
 public class Address {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected int addressID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected long id;
     protected String country; // Państwo
     protected String voivodeship; // Województwo
     protected String postCode; // Kod Pocztowy
@@ -28,12 +28,12 @@ public class Address {
         this.houseNumber = houseNumber;
     }
 
-    public int getAddressID() {
-        return addressID;
+    public long getId() {
+        return id;
     }
 
-    public void setAddressID(int addressID) {
-        this.addressID = addressID;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getCountry() {

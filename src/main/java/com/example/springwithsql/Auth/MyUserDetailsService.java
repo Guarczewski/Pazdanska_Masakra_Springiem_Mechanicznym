@@ -1,7 +1,6 @@
 package com.example.springwithsql.Auth;
 
 import com.example.springwithsql.Auth.Models.SecurityUser;
-import com.example.springwithsql.Auth.Trash.MyUserDetails;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;

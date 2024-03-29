@@ -8,22 +8,32 @@ public class Portions {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
     protected int quantity;
+    protected String timeOfDay;
     @ManyToOne
     @JoinColumn(name = "food_id")
     protected Food food;
 
     public Portions(){}
 
-    public Portions(int quantity, Food food) {
+    public Portions(int quantity, Food food, String timeOfDay) {
         this.quantity = quantity;
         this.food = food;
+        this.timeOfDay = timeOfDay;
+    }
+
+    public String getTimeOfDay() {
+        return timeOfDay;
+    }
+
+    public void setTimeOfDay(String timeOfDay) {
+        this.timeOfDay = timeOfDay;
     }
 
     public long getId() {
         return id;
     }
 
-    public void setId(int id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -48,6 +58,7 @@ public class Portions {
         return "Portions{" +
                 "id=" + id +
                 ", quantity=" + quantity +
+                ", timeOfDay='" + timeOfDay + '\'' +
                 ", food=" + food +
                 '}';
     }

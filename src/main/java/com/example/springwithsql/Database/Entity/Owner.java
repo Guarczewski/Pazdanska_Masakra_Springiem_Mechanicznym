@@ -5,8 +5,8 @@ import jakarta.persistence.*;
 @Entity
 public class Owner {
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    protected int clientID;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected long id;
     protected String name;
     protected String surname;
     protected String phoneNumber;
@@ -25,12 +25,13 @@ public class Owner {
         this.address = address;
     }
 
-    public int getPersonID() {
-        return clientID;
+
+    public long getId() {
+        return id;
     }
 
-    public void setPersonID(int personID) {
-        this.clientID = personID;
+    public void setId(long id) {
+        this.id = id;
     }
 
     public String getName() {
