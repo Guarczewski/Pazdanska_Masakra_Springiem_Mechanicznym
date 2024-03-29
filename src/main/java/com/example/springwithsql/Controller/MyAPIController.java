@@ -4,27 +4,26 @@ import com.example.springwithsql.Database.Entity.*;
 
 import com.example.springwithsql.Database.Repository.*;
 
-import com.example.springwithsql.Auth.MyUserRepository;
+import com.example.springwithsql.Database.Repository.AccountRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.ArrayList;
 import java.util.List;
 
 @RestController
 public class MyAPIController {
     @Autowired
-    private MyUserRepository myUserRepository;
+    private AccountRepository accountRepository;
     @Autowired
     private FoodRepository foodRepository;
     @Autowired
-    private OwnerRepository ownerRepository;
+    private PersonRepository personRepository;
     @Autowired
     private HorseRepository horseRepository;
     @Autowired
-    private HorsePortionsRepository horsePortionsRepository;
+    private DietRepository dietRepository;
     @Autowired
     private PortionsRepository portionsRepository;
     @Autowired
@@ -202,38 +201,38 @@ public class MyAPIController {
     // BASIC OWNER REQUEST
     // ================================================================================================================
     @GetMapping("/api/Owner/") // Fetch All
-    public ResponseEntity<List<Owner>> getOwner(){
-        return new ResponseEntity<>(ownerRepository.findAll(), HttpStatus.OK);
+    public ResponseEntity<List<Person>> getOwner(){
+        return new ResponseEntity<>(personRepository.findAll(), HttpStatus.OK);
     }
     @GetMapping("/api/Owner/{id}") // Fetch One By ID
-    public ResponseEntity<Owner> getOwnerByID(@PathVariable Long id){
-        if (ownerRepository.findById(id).isPresent()) {
-            return new ResponseEntity<>(ownerRepository.findById(id).get(), HttpStatus.OK);
+    public ResponseEntity<Person> getOwnerByID(@PathVariable Long id){
+        if (personRepository.findById(id).isPresent()) {
+            return new ResponseEntity<>(personRepository.findById(id).get(), HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
     @PostMapping("/api/Owner/") // Add New
-    public ResponseEntity<Owner> addOwner(@RequestBody Owner owner){
-        ownerRepository.save(owner);
-        return new ResponseEntity<>(owner, HttpStatus.OK);
+    public ResponseEntity<Person> addOwner(@RequestBody Person person){
+        personRepository.save(person);
+        return new ResponseEntity<>(person, HttpStatus.OK);
     }
     @PutMapping("/api/Owner/{id}") // Update Existing
-    public ResponseEntity<Owner> updateOwnerByID(@PathVariable Long id, @RequestBody Owner owner){
-        if (ownerRepository.findById(id).isPresent()) {
-            owner.setId(id);
-            ownerRepository.save(owner);
-            return new ResponseEntity<>(owner, HttpStatus.OK);
+    public ResponseEntity<Person> updateOwnerByID(@PathVariable Long id, @RequestBody Person person){
+        if (personRepository.findById(id).isPresent()) {
+            person.setId(id);
+            personRepository.save(person);
+            return new ResponseEntity<>(person, HttpStatus.OK);
         }
         else {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
     @DeleteMapping("/api/Owner/{id}") // Delete One By ID
-    public ResponseEntity<Owner> deleteOwnerByID(@PathVariable Long id){
-        if (ownerRepository.findById(id).isPresent()) {
-            ownerRepository.deleteById(id);
+    public ResponseEntity<Person> deleteOwnerByID(@PathVariable Long id){
+        if (personRepository.findById(id).isPresent()) {
+            personRepository.deleteById(id);
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         else {

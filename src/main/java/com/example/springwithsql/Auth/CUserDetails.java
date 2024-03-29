@@ -1,5 +1,6 @@
-package com.example.springwithsql.Auth.Models;
+package com.example.springwithsql.Auth;
 
+import com.example.springwithsql.Database.Entity.Account;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -7,27 +8,30 @@ import org.springframework.security.core.userdetails.UserDetails;
 import java.util.Arrays;
 import java.util.Collection;
 
-public class SecurityUser implements UserDetails {
+public class CUserDetails implements UserDetails {
+    private final Account account;
 
-    private final UserModel user;
+    public CUserDetails(Account account) {
+        this.account = account;
+    }
 
-    public SecurityUser(UserModel user) {
-        this.user = user;
+    public Account getAccount() {
+        return account;
     }
 
     @Override
     public String getUsername() {
-        return user.getUsername();
+        return account.getUsername();
     }
 
     @Override
     public String getPassword() {
-        return user.getPassword();
+        return account.getPassword();
     }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        return Arrays.stream(user.getRoles().split(",")).map(SimpleGrantedAuthority::new).toList();
+        return Arrays.stream(account.getRoles().split(",")).map(SimpleGrantedAuthority::new).toList();
     }
 
     @Override
@@ -48,5 +52,12 @@ public class SecurityUser implements UserDetails {
     @Override
     public boolean isEnabled() {
         return true;
+    }
+
+    @Override
+    public String toString() {
+        return "SecurityUser{" +
+                "user=" + account +
+                '}';
     }
 }

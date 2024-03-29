@@ -83,4 +83,17 @@ public class Address {
     public void setHouseNumber(String houseNumber) {
         this.houseNumber = houseNumber;
     }
+
+    @Override
+    public String toString() {
+        return "Address{" +
+                "id=" + id +
+                ", country='" + country + '\'' +
+                ", voivodeship='" + voivodeship + '\'' +
+                ", postCode='" + postCode + '\'' +
+                ", city='" + city + '\'' +
+                ", street='" + street + '\'' +
+                ", houseNumber='" + houseNumber + '\'' +
+                '}';
+    }
 }

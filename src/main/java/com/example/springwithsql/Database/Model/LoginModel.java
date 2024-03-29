@@ -1,4 +1,4 @@
-package com.example.springwithsql.Auth.Models;
+package com.example.springwithsql.Database.Model;
 
 public class LoginModel{
     String inUsername;

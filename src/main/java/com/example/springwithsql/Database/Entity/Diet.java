@@ -1,33 +1,27 @@
 package com.example.springwithsql.Database.Entity;
 
 import jakarta.persistence.*;
+
 @Entity
-public class HorseOwner {
+public class Diet {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
     @ManyToOne
     @JoinColumn(name = "horseID")
     private Horse horse;
+
     @ManyToOne
-    @JoinColumn(name = "ownerID")
-    private Owner owner;
+    @JoinColumn(name = "portionID")
+    private Portions portions;
 
-    HorseOwner(){
+    Diet(){
 
     }
 
-    public HorseOwner(Horse horse, Owner owner) {
+    public Diet(Horse horse, Portions portions) {
         this.horse = horse;
-        this.owner = owner;
-    }
-
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
+        this.portions = portions;
     }
 
     public Horse getHorse() {
@@ -38,11 +32,19 @@ public class HorseOwner {
         this.horse = horse;
     }
 
-    public Owner getOwner() {
-        return owner;
+    public Long getId() {
+        return id;
     }
 
-    public void setOwner(Owner owner) {
-        this.owner = owner;
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+    public Portions getPortions() {
+        return portions;
+    }
+
+    public void setPortions(Portions portions) {
+        this.portions = portions;
     }
 }

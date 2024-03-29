@@ -3,7 +3,7 @@ package com.example.springwithsql.Database.Entity;
 import jakarta.persistence.*;
 
 @Entity
-public class Owner {
+public class Person {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     protected long id;
@@ -15,9 +15,9 @@ public class Owner {
     @JoinColumn(name = "addressID")
     protected Address address;
 
-    public Owner(){}
+    public Person(){}
 
-    public Owner(String name, String surname, String phoneNumber, String emailAddress, Address address) {
+    public Person(String name, String surname, String phoneNumber, String emailAddress, Address address) {
         this.name = name;
         this.surname = surname;
         this.phoneNumber = phoneNumber;
@@ -72,6 +72,18 @@ public class Owner {
 
     public void setAddress(Address address) {
         this.address = address;
+    }
+
+    @Override
+    public String toString() {
+        return "Person{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", surname='" + surname + '\'' +
+                ", phoneNumber='" + phoneNumber + '\'' +
+                ", emailAddress='" + emailAddress + '\'' +
+                ", address=" + address +
+                '}';
     }
 }
 

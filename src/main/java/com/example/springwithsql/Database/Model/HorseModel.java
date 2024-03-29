@@ -1,16 +1,16 @@
-package com.example.springwithsql.Controller.Model;
+package com.example.springwithsql.Database.Model;
 
 import com.example.springwithsql.Database.Entity.Horse;
-import com.example.springwithsql.Database.Entity.Owner;
+import com.example.springwithsql.Database.Entity.Person;
 import com.example.springwithsql.Database.Entity.Portions;
 
 import java.util.List;
 
 public class HorseModel extends Horse {
     List<Portions> portionsList;
-    List<Owner> ownerList;
+    List<Person> personList;
 
-    public HorseModel(Horse horse, List<Portions> portionsList, List<Owner> ownerList){
+    public HorseModel(Horse horse, List<Portions> portionsList, List<Person> personList){
         setId(horse.getId());
         setName(horse.getName());
         setRace(horse.getRace());
@@ -21,7 +21,7 @@ public class HorseModel extends Horse {
         setBirthDate(horse.getBirthDate());
 
         this.portionsList = portionsList;
-        this.ownerList = ownerList;
+        this.personList = personList;
     }
 
     public List<Portions> getPortionsList() {
@@ -32,11 +32,11 @@ public class HorseModel extends Horse {
         this.portionsList = portionsList;
     }
 
-    public List<Owner> getOwnerList() {
-        return ownerList;
+    public List<Person> getOwnerList() {
+        return personList;
     }
 
-    public void setOwnerList(List<Owner> ownerList) {
-        this.ownerList = ownerList;
+    public void setOwnerList(List<Person> personList) {
+        this.personList = personList;
     }
 }

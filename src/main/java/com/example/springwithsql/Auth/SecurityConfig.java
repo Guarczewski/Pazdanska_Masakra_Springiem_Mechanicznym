@@ -7,6 +7,7 @@ import org.springframework.security.config.annotation.method.configuration.Enabl
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.annotation.web.configurers.AbstractHttpConfigurer;
+import org.springframework.security.config.annotation.web.configurers.CorsConfigurer;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
@@ -15,19 +16,20 @@ import org.springframework.security.web.SecurityFilterChain;
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
 
 public class SecurityConfig {
-    private final MyUserDetailsService myUserDetailsService;
-    public SecurityConfig(MyUserDetailsService myUserDetailsService) {
-        this.myUserDetailsService = myUserDetailsService;
+    private final CUserDetailsService cUserDetailsService;
+    public SecurityConfig(CUserDetailsService cUserDetailsService) {
+        this.cUserDetailsService = cUserDetailsService;
     }
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
+                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         (authorize) -> authorize
                                 //.requestMatchers("/api/**").hasRole("USER")
                                 .anyRequest().permitAll())
-                .userDetailsService(myUserDetailsService)
+                .userDetailsService(cUserDetailsService)
                 .httpBasic(Customizer.withDefaults()).build();
     }
     @Bean

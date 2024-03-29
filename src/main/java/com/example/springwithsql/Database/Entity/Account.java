@@ -1,32 +1,33 @@
-package com.example.springwithsql.Auth.Models;
+package com.example.springwithsql.Database.Entity;
 
+import com.example.springwithsql.Database.Entity.Person;
 import jakarta.persistence.*;
 
 @Entity
-@Table(name = "UserLogin")
-public class UserModel {
+public class Account {
 
     @Id
-    @GeneratedValue(strategy = GenerationType.AUTO)
-    private Long id;
-    private String username;
-    private String password;
-    private String roles;
-
-    public UserModel() {
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    protected long id;
+    protected String username;
+    protected String password;
+    protected String roles;
+    @OneToOne
+    protected Person details;
+    public Account() {
     }
-
-    public UserModel(String username, String password, String roles) {
+    public Account(String username, String password, String roles, Person details) {
         this.username = username;
         this.password = password;
         this.roles = roles;
+        this.details = details;
     }
 
-    public Long getId() {
+    public long getId() {
         return id;
     }
 
-    public void setId(Long id) {
+    public void setId(long id) {
         this.id = id;
     }
 
@@ -54,13 +55,22 @@ public class UserModel {
         this.roles = roles;
     }
 
+    public Person getDetails() {
+        return details;
+    }
+
+    public void setDetails(Person details) {
+        this.details = details;
+    }
+
     @Override
     public String toString() {
-        return "SecurityUser{" +
+        return "Account{" +
                 "id=" + id +
-                ", username='" + username + '\'' +
+                ", login='" + username + '\'' +
                 ", password='" + password + '\'' +
                 ", roles='" + roles + '\'' +
+                ", details=" + details +
                 '}';
     }
 }
