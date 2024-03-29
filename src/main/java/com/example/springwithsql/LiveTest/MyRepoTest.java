@@ -13,6 +13,7 @@ import org.springframework.boot.ApplicationRunner;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Component;
 
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -52,7 +53,7 @@ public class MyRepoTest implements ApplicationRunner {
 
 
 
-        Food fish = new Food("Fish", 4.99);
+/*        Food fish = new Food("Fish", 4.99);
         Food potato = new Food("Potato", 4.99);
         foodRepository.save(fish);
         foodRepository.save(potato);
@@ -78,7 +79,10 @@ public class MyRepoTest implements ApplicationRunner {
         System.out.println("Horse id after save: " + horse.getId());
 
         for (Portions tmp : portions)
-            horsePortionsRepository.save(new HorsePortions(horse, tmp));
+            horsePortionsRepository.save(new HorsePortions(horse, tmp));*/
+
+
+        horseRepository.save(new Horse("Skarto", "Małopolska", "Gniada","Awans","Samira","Skarto to bardzo energiczny i chętny do pracy wałach. Koń z osiągnięciami sportowymi. Zawody i parkur nie są mu obce. Skarto jest ulubieńcem wszyskich jeźdźców.", LocalDate.now()));
 
     }
 }

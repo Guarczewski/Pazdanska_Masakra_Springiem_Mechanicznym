@@ -20,8 +20,14 @@ public class Horse {
 
     public Horse() {}
 
-    public Horse(String name) {
+    public Horse(String name, String race, String ointment, String fatherName, String motherName, String description, LocalDate birthDate) {
         this.name = name;
+        this.race = race;
+        this.ointment = ointment;
+        this.fatherName = fatherName;
+        this.motherName = motherName;
+        this.description = description;
+        this.birthDate = birthDate;
     }
 
     public long getId() {
@@ -40,4 +46,51 @@ public class Horse {
         this.name = name;
     }
 
+    public String getRace() {
+        return race;
+    }
+
+    public void setRace(String race) {
+        this.race = race;
+    }
+
+    public String getOintment() {
+        return ointment;
+    }
+
+    public void setOintment(String ointment) {
+        this.ointment = ointment;
+    }
+
+    public String getFatherName() {
+        return fatherName;
+    }
+
+    public void setFatherName(String fatherName) {
+        this.fatherName = fatherName;
+    }
+
+    public String getMotherName() {
+        return motherName;
+    }
+
+    public void setMotherName(String motherName) {
+        this.motherName = motherName;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
+    }
+
+    public LocalDate getBirthDate() {
+        return birthDate;
+    }
+
+    public void setBirthDate(LocalDate birthDate) {
+        this.birthDate = birthDate;
+    }
 }

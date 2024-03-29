@@ -3,7 +3,6 @@ package com.example.springwithsql.Controller;
 import com.example.springwithsql.Auth.Models.LoginModel;
 import com.example.springwithsql.Auth.Models.UserModel;
 import com.example.springwithsql.Auth.MyUserRepository;
-import com.example.springwithsql.Entity.MyMessageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.password.PasswordEncoder;
@@ -16,8 +15,6 @@ import org.springframework.web.bind.annotation.RestController;
 public class MyOpenAPIController {
     @Autowired
     private MyUserRepository myUserRepository;
-    @Autowired
-    private MyMessageRepository myMessageRepository;
     @Autowired
     private PasswordEncoder passwordEncoder;
 

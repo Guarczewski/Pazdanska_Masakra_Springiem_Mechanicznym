@@ -25,7 +25,7 @@ public class SecurityConfig {
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         (authorize) -> authorize
-                                .requestMatchers("/api/**").hasRole("USER")
+                                //.requestMatchers("/api/**").hasRole("USER")
                                 .anyRequest().permitAll())
                 .userDetailsService(myUserDetailsService)
                 .httpBasic(Customizer.withDefaults()).build();

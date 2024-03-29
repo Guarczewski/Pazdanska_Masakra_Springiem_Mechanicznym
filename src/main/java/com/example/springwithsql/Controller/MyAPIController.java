@@ -27,6 +27,59 @@ public class MyAPIController {
     @Autowired
     private HorsePortionsRepository portionsRepository;
 
+    // ================================================================================================================
+    // BASIC HORSE REQUESTS
+    // ================================================================================================================
+
+    @GetMapping("/api/Horse/") // Fetch All
+    public ResponseEntity<List<Horse>> getHorse(){
+        return new ResponseEntity<>(horseRepository.findAll(), HttpStatus.BAD_REQUEST);
+    }
+    @GetMapping("/api/Horse/{id}") // Fetch One By ID
+    public ResponseEntity<Horse> getHorseById(@PathVariable Long id){
+        if (horseRepository.findById(id).isPresent()) {
+            return new ResponseEntity<>(horseRepository.findById(id).get(), HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @PostMapping("/api/Horse/") // Add New
+    public ResponseEntity<Horse> addHorse(@RequestBody Horse horse){
+        if (horseRepository.findById(horse.getId()).isPresent()) {
+            return new ResponseEntity<>(horse, HttpStatus.ALREADY_REPORTED);
+        }
+        else {
+            horseRepository.save(horse);
+            return new ResponseEntity<>(horse, HttpStatus.OK);
+        }
+    }
+    @PutMapping("/api/Horse/{id}") // Update Existing
+    public ResponseEntity<Horse> updateHorseByID(@PathVariable Long id, @RequestBody Horse horse){
+        if (horseRepository.findById(id).isPresent()) {
+            horse.setId(id);
+            horseRepository.save(horse);
+            return new ResponseEntity<>(horse, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @DeleteMapping("/api/Horse/{id}") // Delete One By ID
+    public ResponseEntity<Horse> deleteHorseByID(@PathVariable Long id){
+        if (horseRepository.findById(id).isPresent()) {
+            horseRepository.deleteById(id);
+            return new ResponseEntity<>(null, HttpStatus.OK);
+        }
+        else {
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+
+    // ================================================================================================================
+    //
+    // ================================================================================================================
+
 
     @GetMapping("/Test/")
     public ResponseEntity<HorseModel> newHorse() {
