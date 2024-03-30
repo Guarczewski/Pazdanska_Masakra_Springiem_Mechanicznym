@@ -42,9 +42,8 @@ public class MyAPIControllerAdv {
 
 
     @GetMapping("/api/profile")
-   // @PreAuthorize("hasRole('ADMIN')")
+    @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Person> checkLogin(){
-
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
         CUserDetails fetchedUser = (CUserDetails) authentication.getPrincipal();
         System.out.println(authentication.getPrincipal().toString());
@@ -69,13 +68,22 @@ public class MyAPIControllerAdv {
 
         List<HorseModel> output = new ArrayList<>();
         output.add(new HorseModel(horse,portions, people));
-        output.add(new HorseModel(horse,portions, people));
-        output.add(new HorseModel(horse,portions, people));
 
         return new ResponseEntity<>(output, HttpStatus.OK);
-
-
     }
 
+    @GetMapping("/api/MyHorses/")
+    @PreAuthorize("hasRole('ADMIN')")
+    public ResponseEntity<List<Horse>> getMyHorses(){
+        Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
+        CUserDetails fetchedUser = (CUserDetails) authentication.getPrincipal();
+        long tempID = fetchedUser.getAccount().getDetails().getId();
+
+        List<Horse> outList = new ArrayList<>();
+        for (Ownership ownership : ownershipRepository.findAllByPersonId(tempID))
+            outList.add(ownership.getHorse());
+
+        return new ResponseEntity<>(outList, HttpStatus.OK);
+    }
 
 }
