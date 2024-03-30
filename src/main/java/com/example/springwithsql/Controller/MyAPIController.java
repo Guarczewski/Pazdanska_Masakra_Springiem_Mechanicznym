@@ -198,14 +198,14 @@ public class MyAPIController {
         }
     }
     // ================================================================================================================
-    // BASIC OWNER REQUEST
+    // BASIC PERSON REQUEST
     // ================================================================================================================
-    @GetMapping("/api/Owner/") // Fetch All
-    public ResponseEntity<List<Person>> getOwner(){
+    @GetMapping("/api/Person/") // Fetch All
+    public ResponseEntity<List<Person>> getPerson(){
         return new ResponseEntity<>(personRepository.findAll(), HttpStatus.OK);
     }
-    @GetMapping("/api/Owner/{id}") // Fetch One By ID
-    public ResponseEntity<Person> getOwnerByID(@PathVariable Long id){
+    @GetMapping("/api/Person/{id}") // Fetch One By ID
+    public ResponseEntity<Person> getPersonByID(@PathVariable Long id){
         if (personRepository.findById(id).isPresent()) {
             return new ResponseEntity<>(personRepository.findById(id).get(), HttpStatus.OK);
         }
@@ -213,13 +213,13 @@ public class MyAPIController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-    @PostMapping("/api/Owner/") // Add New
-    public ResponseEntity<Person> addOwner(@RequestBody Person person){
+    @PostMapping("/api/Person/") // Add New
+    public ResponseEntity<Person> addPerson(@RequestBody Person person){
         personRepository.save(person);
         return new ResponseEntity<>(person, HttpStatus.OK);
     }
-    @PutMapping("/api/Owner/{id}") // Update Existing
-    public ResponseEntity<Person> updateOwnerByID(@PathVariable Long id, @RequestBody Person person){
+    @PutMapping("/api/Person/{id}") // Update Existing
+    public ResponseEntity<Person> updatePersonByID(@PathVariable Long id, @RequestBody Person person){
         if (personRepository.findById(id).isPresent()) {
             person.setId(id);
             personRepository.save(person);
@@ -229,8 +229,8 @@ public class MyAPIController {
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
-    @DeleteMapping("/api/Owner/{id}") // Delete One By ID
-    public ResponseEntity<Person> deleteOwnerByID(@PathVariable Long id){
+    @DeleteMapping("/api/Person/{id}") // Delete One By ID
+    public ResponseEntity<Person> deletePersonByID(@PathVariable Long id){
         if (personRepository.findById(id).isPresent()) {
             personRepository.deleteById(id);
             return new ResponseEntity<>(null, HttpStatus.OK);
