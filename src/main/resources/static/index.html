@@ -26,13 +26,17 @@
 <body>
 <main id="top"> </main>
 
-<div class="container" id="placeHolder"> </div>
+<div class="container" id="loginOutcome"> </div>
 <div class="container" id="placeHolder2"> </div>
+<div class="container" id="placeHolder3"> </div>
 
 
 
 <script type="text/babel">
 
+    let User;
+    let Foods;
+    
     function App() {
 
         function Testing(Object) {
@@ -59,72 +63,216 @@
         }
 
 
-        async function testAuth(){
-
+        async function login(){ // Attempt to Login
             const username = document.getElementById('username').value;
             const password = document.getElementById('password').value;
 
-            const basicAuth = {
-                username: username,
-                password: password
-            };
+            const basicAuth = { username: username, password: password };
 
-            await axios.get('http://localhost:8080/profile', {auth: basicAuth}).then(response => {
-                ReactDOM.render(
-                    <p> {response.data.name} </p>, document.getElementById("placeHolder2"));
+            await axios.get('http://localhost:8080/api/profile', {auth: basicAuth}).then(response => {
+                User = response.data;
+                ReactDOM.render( <p> Witxaj {response.data.name}! </p>, document.getElementById("loginOutcome"));
+            }).catch(err => {
+                console.log(err)
+                ReactDOM.render( <p> Login Error </p>, document.getElementById("loginOutcome"));
+            });
+
+            loadFoods();
+            loadOwnedHorses();
+            
+        }
+
+        async function loadFoods(){
+            await axios.get('http://localhost:8080/api/Food/').then(response => {
+                response.data.forEach((e) => {
+                    Foods = response.data.map((item, index) => (<option value={item.id}>{item.name} {item.price}</option>));
+                })
+                console.log(Foods);
+            }).catch(err => {
+                console.log(err)
+                ReactDOM.render( <p> Login Error </p>, document.getElementById("loginOutcome"));
+            });
+        }
+
+        async function loadOwnedHorses() {
+
+
+
+            await axios.get('http://localhost:8080/api/All/1').then(response => {
+
+                response.data.forEach((e) => {
+                    // Owner List
+
+                    const inPortion = (
+                        <div class="row">
+                            <div class="form-group col-md-3">
+                                <label for="name"> Quantity </label>
+                                <input type="text" class="form-control" id="" placeholder="Quantity"/>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="surname"> Time of Day </label>
+                                <input type="text" class="form-control" id="" placeholder="Morning"/>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="name"> Name </label> <br/>
+                                <select class="form-select"> {Foods} </select>
+                            </div>
+                            <div class="form-group col-md-3">
+                                <label for="name"> Name </label> <br/>
+                                <button onClick="loadOwnedHorses" class="btn btn-success col-md-12"> Add </button>
+                            </div>
+                        </div>                        
+                    )
+                    
+
+                    const owners = e.ownerList.map((o, index) => (
+                        <section>
+                            <form>    
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="name"> Name </label>
+                                        <input type="text" class="form-control" id="" placeholder="Name" value={o.name}/>
+                                    </div>
+                                    <div class="form-group col-md-6">
+                                        <label for="surname"> Surname </label>
+                                        <input type="text" class="form-control" id="" placeholder="Surname" value={o.surname}/>
+                                    </div>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="phone">Phone Number</label>
+                                    <input type="text" class="form-control" id="" placeholder="+48 555 555 555" value={o.phoneNumber}/>
+                                </div>
+
+                                <div class="form-group">
+                                    <label for="email">E-Mail Address</label>
+                                    <input type="text" class="form-control" id="" placeholder="example@mail.com" value={o.emailAddress}/>
+                                </div>
+
+                            </form>
+
+                            <form>
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label for="name"> Country </label>
+                                        <input type="text" class="form-control" id="" placeholder="Country" value={o.name}/>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="surname"> Voivodeship </label>
+                                        <input type="text" class="form-control" id="" placeholder="Voivodeship" value={o.surname}/>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="phone">Post Code</label>
+                                        <input type="text" class="form-control" id="" placeholder="Post-Code" value={o.address.postCode}/>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="email">City</label>
+                                        <input type="text" class="form-control" id="" placeholder="City" value={o.address.city}/>
+                                    </div>
+                                </div>
+
+                                <div class="row">
+                                    <div class="form-group col-md-6">
+                                        <label for="phone">Street</label>
+                                        <input type="text" class="form-control" id="" placeholder="Street" value={o.address.street}/>
+                                    </div>
+
+                                    <div class="form-group col-md-6">
+                                        <label for="email">House Number</label>
+                                        <input type="text" class="form-control" id="" placeholder="House Number" value={o.address.houseNumber}/>
+                                    </div>
+                                </div>
+                            </form>
+                        </section>
+                    ));
+
+                    const portions = e.portionsList.map((p, index) => (
+                        <section>
+                            <form>
+                                <div class="row">
+                                    <div class="form-group col-md-3">
+                                        <label for="name"> Quantity </label>
+                                        <input type="text" class="form-control" id="" placeholder="Quantity" value={p.quantity}/>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="surname"> Time of Day </label>
+                                        <input type="text" class="form-control" id="" placeholder="Morning" value={p.timeOfDay}/>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="name"> Name </label>
+                                        <input readonly="true" type="text" class="form-control" id="" placeholder="Name" value={p.food.name}/>
+                                    </div>
+
+                                    <div class="form-group col-md-3">
+                                        <label for="surname"> Price </label>
+                                        <input readonly="true" type="text" class="form-control" id="" placeholder="Price" value={p.food.price}/>
+                                    </div>
+                                </div>
+
+
+
+                            </form>
+                        </section>
+                    ));
+                    
+                    ReactDOM.render(<div> {owners} {portions} {inPortion}</div>, document.getElementById('placeHolder3'))
+
+                })
+
             }).catch(err => {
                 console.log(err)
             });
 
-
         }
 
-        async function getInfo() {
-            let id = document.getElementById('FirstSelect').value;
-            console.log(id);
-            await axios.get('https://localhost:7064/api/Items/' + id).then(response => {
-                Testing(response.data)
-            }).catch(err => {
-                console.log(myerror)
-            });
-        }
 
         async function getInfos() {
             await axios.get('https://localhost:7064/api/Items/').then(response => {
 
                 response.data.forEach((e) => {
+                    console.log(e);
                     const elements = response.data.map((item, index) => (<option value={item.id}>{item.name}</option>));
                     ReactDOM.render(
-                        <select id="FirstSelect" class="form-select" onChange={getInfo}>{elements}</select>, document.getElementById('placeHolder'));
+                        <select id="FirstSelect" class="form-select" onChange={getInfos}>{elements}</select>, document.getElementById('placeHolder3'));
                 })
 
                 Testing(response.data[0]);
 
 
             }).catch(err => {
-                console.log(myerror)
+                console.log(err)
             });
 
         }
 
         return (
-
-
-
             <div class="container">
-
                 <form>
-                    <input type="text" id="username" placeholder="Username"/>
-                    <input type="password" id="password" placeholder="Password"/>
-                    <button type="button" class="btn btn-danger" onClick={testAuth}> Test Auth </button>
-                </form>
+                    <div class="form-group row">
 
-                <button type="button" class="btn btn-primary" onClick={getInfos}> Odczytaj Dane </button>
+                        <div class="form-group col-md-4"> 
+                            <label for="username">Username</label>
+                            <input type="text" class="form-control" id="username" placeholder="Username"/>
+                        </div>
+
+                        <div class="form-group col-md-4"> 
+                            <label for="Name">Password</label>
+                            <input type="password" class="form-control" id="password" placeholder="Password"/>
+                        </div>
+                        
+                        <div class="form-group col-md-4"> 
+                            <label for="Name">Accept</label>
+                            <button type="button" class="btn btn-success col-md-12" onClick={login}> Login </button>
+                        </div>
+                    </div>
+                </form>
             </div>
         );
-
-
-
     }
 
     const container = document.getElementById('top');

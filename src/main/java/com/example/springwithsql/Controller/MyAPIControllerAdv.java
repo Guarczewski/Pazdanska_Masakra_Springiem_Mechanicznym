@@ -11,6 +11,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RestController;
@@ -19,6 +20,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
+@CrossOrigin
 public class MyAPIControllerAdv {
 
     @Autowired
@@ -39,8 +41,8 @@ public class MyAPIControllerAdv {
     private DietRepository dietRepository;
 
 
-    @GetMapping("/profile")
-    @PreAuthorize("hasRole('ADMIN')")
+    @GetMapping("/api/profile")
+   // @PreAuthorize("hasRole('ADMIN')")
     public ResponseEntity<Person> checkLogin(){
 
         Authentication authentication = SecurityContextHolder.getContext().getAuthentication();
@@ -51,7 +53,7 @@ public class MyAPIControllerAdv {
     }
 
     @GetMapping("/api/All/{id}")
-    public ResponseEntity<HorseModel> getAll(@PathVariable Long id){
+    public ResponseEntity<List<HorseModel>> getAll(@PathVariable Long id){
 
         Horse horse = horseRepository.findById(id).get();
 
@@ -65,7 +67,12 @@ public class MyAPIControllerAdv {
         for (Diet tmp : horsePortions)
             portions.add(tmp.getPortions());
 
-        return new ResponseEntity<>(new HorseModel(horse,portions, people), HttpStatus.OK);
+        List<HorseModel> output = new ArrayList<>();
+        output.add(new HorseModel(horse,portions, people));
+        output.add(new HorseModel(horse,portions, people));
+        output.add(new HorseModel(horse,portions, people));
+
+        return new ResponseEntity<>(output, HttpStatus.OK);
 
 
     }

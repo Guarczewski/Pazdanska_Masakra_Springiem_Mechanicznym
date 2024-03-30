@@ -11,10 +11,12 @@ import org.springframework.security.config.annotation.web.configurers.CorsConfig
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
+import org.springframework.web.servlet.config.annotation.CorsRegistry;
+import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
+
 @Configuration
 @EnableWebSecurity
 @EnableMethodSecurity(securedEnabled = true, jsr250Enabled = true)
-
 public class SecurityConfig {
     private final CUserDetailsService cUserDetailsService;
     public SecurityConfig(CUserDetailsService cUserDetailsService) {
@@ -23,7 +25,6 @@ public class SecurityConfig {
     @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
-                .cors(Customizer.withDefaults())
                 .csrf(AbstractHttpConfigurer::disable)
                 .authorizeHttpRequests(
                         (authorize) -> authorize
@@ -32,6 +33,7 @@ public class SecurityConfig {
                 .userDetailsService(cUserDetailsService)
                 .httpBasic(Customizer.withDefaults()).build();
     }
+
     @Bean
     PasswordEncoder passwordEncoder() {
         return new BCryptPasswordEncoder();
