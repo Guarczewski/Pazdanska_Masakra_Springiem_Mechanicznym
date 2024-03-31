@@ -1,6 +1,8 @@
 package com.example.springwithsql.Controller;
 
 import com.example.springwithsql.Auth.CUserDetails;
+import com.example.springwithsql.Database.Model.AssignQueryAPI;
+import com.example.springwithsql.Database.Model.PortionUpdate;
 import com.example.springwithsql.Database.Repository.AccountRepository;
 import com.example.springwithsql.Database.Model.HorseModel;
 import com.example.springwithsql.Database.Entity.*;
@@ -11,16 +13,14 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin()
+
 public class MyAPIControllerAdv {
 
     @Autowired
@@ -52,9 +52,12 @@ public class MyAPIControllerAdv {
     }
 
     @GetMapping("/api/All/{id}")
-    public ResponseEntity<List<HorseModel>> getAll(@PathVariable Long id){
+    public ResponseEntity<HorseModel> getAll(@PathVariable Long id){
 
-        Horse horse = horseRepository.findById(id).get();
+        Horse horse = new Horse();
+
+        if (horseRepository.findById(id).isPresent())
+            horse = horseRepository.findById(id).get();
 
         List<Ownership> ownerships = ownershipRepository.findAllByHorseId(id);
         List<Person> people = new ArrayList<>();
@@ -66,10 +69,7 @@ public class MyAPIControllerAdv {
         for (Diet tmp : horsePortions)
             portions.add(tmp.getPortions());
 
-        List<HorseModel> output = new ArrayList<>();
-        output.add(new HorseModel(horse,portions, people));
-
-        return new ResponseEntity<>(output, HttpStatus.OK);
+        return new ResponseEntity<>(new HorseModel(horse,portions, people), HttpStatus.OK);
     }
 
     @GetMapping("/api/MyHorses/")
@@ -85,5 +85,60 @@ public class MyAPIControllerAdv {
 
         return new ResponseEntity<>(outList, HttpStatus.OK);
     }
+    @PostMapping("/api/Portion/Update/")
+    public ResponseEntity<Portions> updatePortionByPortionID(@RequestBody PortionUpdate portionUpdate){
+        Portions portions = new Portions();
+        if (portionsRepository.findById(portionUpdate.getID()).isPresent())
+            portions = portionsRepository.findById(portionUpdate.getID()).get();
+
+        portions.setQuantity(portionUpdate.getQuantity());
+        portions.setTimeOfDay(portionUpdate.getTimeOfDay());
+
+        portionsRepository.save(portions);
+
+        return new ResponseEntity<>(portions, HttpStatus.OK);
+    }
+    @PostMapping("/api/Portion/Add/")
+    public ResponseEntity<Portions> addPortionByFoodID(@RequestBody PortionUpdate portionUpdate){
+        Portions portions = new Portions();
+        Food food = null;
+
+        if (foodRepository.findById(portionUpdate.getID()).isPresent())
+             food = foodRepository.findById(portionUpdate.getID()).get();
+
+        portions.setQuantity(portionUpdate.getQuantity());
+        portions.setTimeOfDay(portionUpdate.getTimeOfDay());
+        portions.setFood(food);
+
+        portionsRepository.save(portions);
+
+        return new ResponseEntity<>(portions, HttpStatus.OK);
+    }
+
+    @PostMapping("/api/Diet/")
+    public ResponseEntity<Diet> addDiet(@RequestBody AssignQueryAPI assignQueryAPI){
+        Horse horse = null;
+        Portions portions = null;
+        Diet diet = null;
+        if (horseRepository.findById(assignQueryAPI.getFirstID()).isPresent())
+            horse = horseRepository.findById(assignQueryAPI.getFirstID()).get();
+
+
+        if (portionsRepository.findById(assignQueryAPI.getSecondID()).isPresent())
+            portions = portionsRepository.findById(assignQueryAPI.getSecondID()).get();
+
+        if (horse != null && portions != null) {
+            diet = new Diet(horse, portions);
+            dietRepository.save(diet);
+        }
+
+        if (diet == null)
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+
+        return new ResponseEntity<>(diet, HttpStatus.OK);
+
+    }
 
 }
+
+

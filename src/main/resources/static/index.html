@@ -24,7 +24,7 @@
 </head>
 
 <body>
-    <style> label{ font-weight: bold; } </style>
+    <style> label{ font-weight: bold; }  * {text-align: center;}</style>
 
     
 <div class="container" id="loginOutcome"> </div>
@@ -43,7 +43,8 @@
     let User;
     let Foods;
     let Persons;
-    
+    let Horse;
+
     function App() {
 
         async function login(){ // Attempt to Login
@@ -87,12 +88,80 @@
             ReactDOM.render( <div> {something} </div>, document.getElementById("horseSelect"));
         }
 
+        async function updateHorseDetails() {
+            const name = document.getElementById('horseNameInput').value;
+            const race = document.getElementById('horseRaceInput').value;
+            const ointment = document.getElementById('horseOintmentInput').value;
+            const fatherName = document.getElementById('horseFatherNameInput').value;
+            const motherName = document.getElementById('horseMotherNameInput').value;
+            const description = document.getElementById('horseMotherNameInput').value;
+            const birthDate = document.getElementById('horseBirthInput').value;
+
+            await axios.put('http://localhost:8080/api/Horse/' + Horse.id, {'name': name, 'race': race, 'ointment': ointment, 'fatherName': fatherName, 'motherName': motherName, 'description': description, 'birthDate': birthDate }).then(response => {
+                ReactDOM.render( <p> Sukces </p>, document.getElementById("loginOutcome"));
+            }).catch(err => {
+                console.log(err)
+                ReactDOM.render( <p> Fail </p>, document.getElementById("loginOutcome"));
+            });
+
+            login();
+
+        }
+        
+        async function updatePortionDetails(existingIndex) {
+
+            const inNameID = "inID_" + existingIndex;
+            const inNameQuantity = "inQuantity_" + existingIndex;
+            const inNameTimeOfDay = "inTimeOfDay_" + existingIndex;
+
+            const inID = document.getElementById(inNameID).value;
+            const inQuantity = document.getElementById(inNameQuantity).value;
+            const inTimeOfDay = document.getElementById(inNameTimeOfDay).value;
+
+            await axios.post('http://localhost:8080/api/Portion/Update/', {'id': inID, 'quantity': inQuantity, 'timeOfDay': inTimeOfDay}).then(response => {
+                
+            }).catch(err => {
+                console.log(err)
+                ReactDOM.render( <p> Login Error </p>, document.getElementById("loginOutcome"));
+            });
+
+            loadHorse();
+
+        }
+
+        async function addNewPortion(){
+            const inFoodID = document.getElementById('newPortionFood').value;
+            const inQuantity = document.getElementById('newPortionQuantity').value;
+            const inTimeOfDay = document.getElementById('newPortionTimeOfDay').value;
+
+            let newPortionID;
+
+            await axios.post('http://localhost:8080/api/Portion/Add/', {'id': inFoodID, 'quantity': inQuantity, 'timeOfDay': inTimeOfDay}).then(response => {
+                newPortionID = response.data.id;
+            }).catch(err => {
+                console.log(err)
+                ReactDOM.render( <p> Login Error </p>, document.getElementById("loginOutcome"));
+            });
+
+            console.log(newPortionID);
+            console.log(Horse.id);
+
+            await axios.post('http://localhost:8080/api/Diet/', {'firstID': Horse.id, 'secondID': newPortionID}).then(response => {
+                console.log("Success")
+            }).catch(err => {
+                console.log(err)
+                ReactDOM.render( <p> Login Error </p>, document.getElementById("loginOutcome"));
+            });
+
+            loadHorse();
+
+        }
+
         async function loadFoods(){
             await axios.get('http://localhost:8080/api/Food/').then(response => {
                 response.data.forEach((e) => {
                     Foods = response.data.map((item, index) => (<option value={item.id}>{item.name} {item.price}</option>));
                 })
-                console.log(Foods);
             }).catch(err => {
                 console.log(err)
                 ReactDOM.render( <p> Login Error </p>, document.getElementById("loginOutcome"));
@@ -118,50 +187,53 @@
             loadOwners(); // Refresh Avaliable Owners
             loadFoods(); // Refresh Avaliable Food
 
+
             await axios.get('http://localhost:8080/api/All/' + id).then(response => {
-
-                response.data.forEach((e) => {
-
-                    const outOwnerData = e.ownerList.map((item, index) => (<option value={item.id}>{item.name} {item.surname[0]}</option>));
-                    const outPortionData = e.portionsList.map((item, index) => (<option value={item.id}>{item.quantity} {item.food.name} {item.food.price}</option>));
+                    Horse = response.data;
                     
+                    const outOwnerData = response.data.ownerList.map((item, index) => (<option value={item.id}>{item.name} {item.surname[0]}</option>));
+                    const outPortionData = response.data.portionsList.map((item, index) => (<option value={item.id}>{item.quantity} {item.food.name} {item.food.price}</option>));
+
                     const inHorse = (
                         <section style={{padding: 25, margin: 5}} class="bg-success">
                             <div class="row">
                                 <div class="form-group col-md-4">
                                     <label for="name"> Name </label>
-                                    <input type="text" class="form-control" id="" placeholder="Name" value={e.name}/>
+                                    <input type="text" class="form-control" id="horseNameInput" placeholder="Name" defaultValue={response.data.name}/>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="surname"> Race </label>
-                                    <input type="text" class="form-control" id="" placeholder="Race" value={e.race}/>
+                                    <input type="text" class="form-control" id="horseRaceInput" placeholder="Race" defaultValue={response.data.race}/>
                                 </div>
                                 <div class="form-group col-md-4">
                                     <label for="name"> Ointment </label> <br/>
-                                    <input type="text" class="form-control" id="" placeholder="Ointment" value={e.ointment}/>
+                                    <input type="text" class="form-control" id="horseOintmentInput" placeholder="Ointment" defaultValue={response.data.ointment}/>
                                 </div>
                             </div>     
 
                             <div class="row">
                                 <div class="form-group col-md-6">
                                     <label for="name"> Father Name </label>
-                                    <input type="text" class="form-control" id="" placeholder="Name" value={e.fatherName}/>
+                                    <input type="text" class="form-control" id="horseFatherNameInput" placeholder="Name" defaultValue={response.data.fatherName}/>
                                 </div>
                                 <div class="form-group col-md-6">
                                     <label for="surname"> Mother Name </label>
-                                    <input type="text" class="form-control" id="" placeholder="Race" value={e.motherName}/>
+                                    <input type="text" class="form-control" id="horseMotherNameInput" placeholder="Race" defaultValue={response.data.motherName}/>
                                 </div>
-                            </div>   
-                            
-                            <div class="form-group col-md-12">
-                                <label for="surname"> Birth Date </label>
-                                <input type="text" class="form-control" id="" placeholder="Race" value={e.birthDate}/>
+                            </div>  
+
+                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <label for="surname"> Birth Date </label>
+                                    <input type="text" class="form-control" id="horseBirthInput" placeholder="Race" defaultValue={response.data.birthDate}/>
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="name"> Action </label> <br/>
+                                    <button onClick={updateHorseDetails} class="btn btn-primary col-md-12"> Update </button>
+                                </div>
                             </div>
 
-                            <div class="form-group col-md-12">
-                                <label for="name"> Action </label> <br/>
-                                <button onClick="loadOwnedHorses" class="btn btn-primary col-md-12"> Update </button>
-                            </div>
                         </section>   
                     )
                     
@@ -171,19 +243,19 @@
                             <div class="row">
                                 <div class="form-group col-md-3">
                                     <label for="name"> Quantity </label>
-                                    <input type="text" class="form-control" id="" placeholder="Quantity"/>
+                                    <input type="text" class="form-control" id="newPortionQuantity" placeholder="Quantity"/>
                                 </div>
                                 <div class="form-group col-md-3">
-                                    <label for="surname"> Time of Day </label>
-                                    <input type="text" class="form-control" id="" placeholder="Morning"/>
-                                </div>
-                                <div class="form-group col-md-3">
-                                    <label for="name"> Name </label> <br/>
-                                    <select class="form-select"> {Foods} </select>
+                                    <label for="name"> Time of Day </label>
+                                    <input type="text" class="form-control" id="newPortionTimeOfDay" placeholder="Morning"/>
                                 </div>
                                 <div class="form-group col-md-3">
                                     <label for="name"> Name </label> <br/>
-                                    <button onClick="loadOwnedHorses" class="btn btn-success col-md-12"> Add </button>
+                                    <select class="form-select" id="newPortionFood"> {Foods} </select>
+                                </div>
+                                <div class="form-group col-md-3">
+                                    <label for="name"> Name </label> <br/>
+                                    <button onClick={addNewPortion} class="btn btn-success col-md-12"> Add </button>
                                 </div>
                             </div>     
                         </section>                   
@@ -234,7 +306,7 @@
                         </section>     
                     )
                     // List Owners
-                    const owners = e.ownerList.map((o, index) => (
+                    const owners = response.data.ownerList.map((o, index) => (
                         <section style={{padding: 25, margin: 5}} class="bg-success">
                               
                                 <div class="row">
@@ -296,34 +368,45 @@
                         </section>
                     ));
                     // List Portions
-                    const portions = e.portionsList.map((p, index) => (
+                    const portions = response.data.portionsList.map((p, index) => (
                         <section style={{padding: 25, margin: 5}} class="bg-success">
                             <div class="row">
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-1">
+                                    <label for="name" class> ID </label>
+                                    <input readonly="true" type="text" class="form-control" id={"inID_" + p.id} placeholder="Index" value={p.id}/>
+                                </div>
+
+                                <div class="form-group col-md-2">
                                     <label for="name" class> Quantity </label>
-                                    <input type="text" class="form-control" id="" placeholder="Quantity" value={p.quantity}/>
+                                    <input type="text" class="form-control" id={"inQuantity_" + p.id} placeholder="Quantity" defaultValue={p.quantity}/>
                                 </div>
 
                                 <div class="form-group col-md-3">
-                                    <label for="surname"> Time of Day </label>
-                                    <input type="text" class="form-control" id="" placeholder="Morning" value={p.timeOfDay}/>
+                                    <label for="name"> Time of Day </label>
+                                    <input type="text" class="form-control" id={"inTimeOfDay_" + p.id} placeholder="Morning" defaultValue={p.timeOfDay}/>
                                 </div>
 
-                                <div class="form-group col-md-3">
+                                <div class="form-group col-md-2">
                                     <label for="name"> Name </label>
-                                    <input readonly="true" type="text" class="form-control" id="" placeholder="Name" value={p.food.name}/>
+                                    <input readonly="true" type="text" class="form-control" id={"inFoodName_" + p.id} placeholder="Name" value={p.food.name}/>
                                 </div>
 
-                                <div class="form-group col-md-3">
-                                    <label for="surname"> Price </label>
-                                    <input readonly="true" type="text" class="form-control" id="" placeholder="Price" value={p.food.price}/>
+                                <div class="form-group col-md-2">
+                                    <label for="name"> Price </label>
+                                    <input readonly="true" type="text" class="form-control" id={"inFoodPrice_" + p.id} placeholder="Price" value={p.food.price}/>
                                 </div>
+
+                                <div class="form-group col-md-2">
+                                    <label for="name"> Action </label> <br/>
+                                    <button onClick={() => updatePortionDetails(p.id)} class="btn btn-primary col-md-12"> Update </button>
+                                </div>
+
                             </div>
                         </section>
                     ));
                     
                     ReactDOM.render(<div> {inHorse} {owners} {inOwner} {outOwner} {portions} {inPortion} {outPortion}</div>, document.getElementById('placeHolder3'))
-                })
+
 
             }).catch(err => {
                 console.log(err)
