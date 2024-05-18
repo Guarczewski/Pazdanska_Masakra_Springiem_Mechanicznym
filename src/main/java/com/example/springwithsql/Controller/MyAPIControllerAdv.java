@@ -19,7 +19,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 @RestController
-@CrossOrigin()
+@CrossOrigin("*")
 
 public class MyAPIControllerAdv {
 
@@ -85,32 +85,24 @@ public class MyAPIControllerAdv {
 
         return new ResponseEntity<>(outList, HttpStatus.OK);
     }
-    @PostMapping("/api/Portion/Update/")
-    public ResponseEntity<Portions> updatePortionByPortionID(@RequestBody PortionUpdate portionUpdate){
-        Portions portions = new Portions();
-        if (portionsRepository.findById(portionUpdate.getID()).isPresent())
-            portions = portionsRepository.findById(portionUpdate.getID()).get();
 
-        portions.setQuantity(portionUpdate.getQuantity());
-        portions.setTimeOfDay(portionUpdate.getTimeOfDay());
 
-        portionsRepository.save(portions);
+    @PostMapping("/api/Portion/Remove/")
+    public ResponseEntity<Portions> removePortionByFoodID(@RequestBody AssignQueryAPI assignQueryAPI){
+        Portions portions = null;
+        Horse horse = null;
 
-        return new ResponseEntity<>(portions, HttpStatus.OK);
-    }
-    @PostMapping("/api/Portion/Add/")
-    public ResponseEntity<Portions> addPortionByFoodID(@RequestBody PortionUpdate portionUpdate){
-        Portions portions = new Portions();
-        Food food = null;
+        if (horseRepository.findById(assignQueryAPI.getFirstID()).isPresent())
+            horse = horseRepository.findById(assignQueryAPI.getFirstID()).get();
 
-        if (foodRepository.findById(portionUpdate.getID()).isPresent())
-             food = foodRepository.findById(portionUpdate.getID()).get();
 
-        portions.setQuantity(portionUpdate.getQuantity());
-        portions.setTimeOfDay(portionUpdate.getTimeOfDay());
-        portions.setFood(food);
+        if (portionsRepository.findById(assignQueryAPI.getSecondID()).isPresent())
+            portions = portionsRepository.findById(assignQueryAPI.getSecondID()).get();
 
-        portionsRepository.save(portions);
+        if (horse != null && portions != null) {
+            Diet diet = dietRepository.findByHorseAndPortions(horse, portions);
+            dietRepository.delete(diet);
+        }
 
         return new ResponseEntity<>(portions, HttpStatus.OK);
     }
@@ -120,9 +112,9 @@ public class MyAPIControllerAdv {
         Horse horse = null;
         Portions portions = null;
         Diet diet = null;
+
         if (horseRepository.findById(assignQueryAPI.getFirstID()).isPresent())
             horse = horseRepository.findById(assignQueryAPI.getFirstID()).get();
-
 
         if (portionsRepository.findById(assignQueryAPI.getSecondID()).isPresent())
             portions = portionsRepository.findById(assignQueryAPI.getSecondID()).get();

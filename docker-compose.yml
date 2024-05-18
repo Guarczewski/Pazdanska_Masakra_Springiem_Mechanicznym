@@ -43,6 +43,17 @@ services:
     depends_on:
       - mariadb
 
+  react-app:
+    build:
+      context: C:/Users/Xionc/Desktop/React/myapp/
+      dockerfile: Dockerfile
+    container_name: react-app
+    ports:
+      - "3000:3000"
+    networks:
+      - my-network
+
+
 networks:
   my-network:
     driver: bridge

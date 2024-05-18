@@ -1,7 +1,7 @@
 package com.example.springwithsql.Database.Model;
 
 public class PortionUpdate {
-    protected long ID;
+    protected long portionID, foodID, horseID;
     protected int quantity;
     protected String timeOfDay;
 
@@ -9,18 +9,36 @@ public class PortionUpdate {
 
     }
 
-    public PortionUpdate(long ID, int quantity, String timeOfDay) {
-        this.ID = ID;
+    public PortionUpdate(long portionID, long foodID, long horseID, int quantity, String timeOfDay) {
+        this.portionID = portionID;
+        this.foodID = foodID;
+        this.horseID = horseID;
         this.quantity = quantity;
         this.timeOfDay = timeOfDay;
     }
 
-    public long getID() {
-        return ID;
+    public long getFoodID() {
+        return foodID;
     }
 
-    public void setID(long ID) {
-        this.ID = ID;
+    public void setFoodID(long foodID) {
+        this.foodID = foodID;
+    }
+
+    public long getHorseID() {
+        return horseID;
+    }
+
+    public void setHorseID(long horseID) {
+        this.horseID = horseID;
+    }
+
+    public long getPortionID() {
+        return portionID;
+    }
+
+    public void setPortionID(long portionID) {
+        this.portionID = portionID;
     }
 
     public int getQuantity() {
