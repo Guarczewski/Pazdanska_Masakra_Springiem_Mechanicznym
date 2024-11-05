@@ -29,6 +29,8 @@ public class MyAPIController {
     private PortionsRepository portionsRepository;
     @Autowired
     private AddressRepository addressRepository;
+    @Autowired
+    private LogRepository logRepository;
 
     // ================================================================================================================
     // BASIC FOOD REQUESTS
@@ -43,6 +45,7 @@ public class MyAPIController {
             return new ResponseEntity<>(foodRepository.findById(id).get(), HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -59,6 +62,7 @@ public class MyAPIController {
             return new ResponseEntity<>(food, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -69,6 +73,7 @@ public class MyAPIController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -85,6 +90,7 @@ public class MyAPIController {
             return new ResponseEntity<>(portionsRepository.findById(id).get(), HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -101,6 +107,7 @@ public class MyAPIController {
             return new ResponseEntity<>(portions, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -111,6 +118,7 @@ public class MyAPIController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -127,6 +135,7 @@ public class MyAPIController {
             return new ResponseEntity<>(horseRepository.findById(id).get(), HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -143,6 +152,7 @@ public class MyAPIController {
             return new ResponseEntity<>(horse, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -153,6 +163,7 @@ public class MyAPIController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -169,6 +180,7 @@ public class MyAPIController {
             return new ResponseEntity<>(addressRepository.findById(id).get(), HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -185,6 +197,7 @@ public class MyAPIController {
             return new ResponseEntity<>(address, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -195,6 +208,7 @@ public class MyAPIController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -211,6 +225,7 @@ public class MyAPIController {
             return new ResponseEntity<>(personRepository.findById(id).get(), HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -227,6 +242,7 @@ public class MyAPIController {
             return new ResponseEntity<>(person, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
@@ -237,13 +253,42 @@ public class MyAPIController {
             return new ResponseEntity<>(null, HttpStatus.OK);
         }
         else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
             return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
         }
     }
     // ================================================================================================================
+    // Log REQUEST
+    // ================================================================================================================
+    @GetMapping("/api/Log/") // Fetch All
+    public ResponseEntity<List<Log>> getLog(){
+        return new ResponseEntity<>(logRepository.findAll(), HttpStatus.OK);
+    }
+    @GetMapping("/api/Log/{id}") // Fetch One By ID
+    public ResponseEntity<Log> getLogByID(@PathVariable Long id){
+        if (logRepository.findById(id).isPresent()) {
+            return new ResponseEntity<>(logRepository.findById(id).get(), HttpStatus.OK);
+        }
+        else {
+            logRepository.save(new Log("Controller","Nie znaleziono obiektu","Nie znaleziono obiektu w bazie danych o takim ID","BRAK","BRAK"));
+            return new ResponseEntity<>(null, HttpStatus.BAD_REQUEST);
+        }
+    }
+    @GetMapping("/api/Log/{logHeader}") // Fetch All
+    public ResponseEntity<List<Log>> getLogByHeader(String logHeader){
+        return new ResponseEntity<>(logRepository.findAllByLogHeader(logHeader), HttpStatus.OK);
+    }
+    @GetMapping("/api/Log/{logUser}") // Fetch All
+    public ResponseEntity<List<Log>> getLogByUser(String logUser){
+        return new ResponseEntity<>(logRepository.findAllByLogUserRole(logUser), HttpStatus.OK);
+    }
+    @GetMapping("/api/Log/{logRole}") // Fetch All
+    public ResponseEntity<List<Log>> getLogByRole(String logRole){
+        return new ResponseEntity<>(logRepository.findAllByLogUserRole(logRole), HttpStatus.OK);
+    }
+    // ================================================================================================================
     // OTHER REQUEST
     // ================================================================================================================
-
 
     @GetMapping("/api/error")
     public ResponseEntity<String> getError(){
