@@ -2,6 +2,7 @@ package com.example.springwithsql.Controller;
 
 import com.example.springwithsql.Auth.CUserDetails;
 import com.example.springwithsql.Database.Model.AssignQueryAPI;
+import com.example.springwithsql.Database.Model.LoginModel;
 import com.example.springwithsql.Database.Model.PortionUpdate;
 import com.example.springwithsql.Database.Repository.AccountRepository;
 import com.example.springwithsql.Database.Model.HorseModel;
@@ -13,6 +14,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.context.SecurityContextHolder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.ArrayList;
@@ -39,6 +41,10 @@ public class MyAPIControllerAdv {
     private OwnershipRepository ownershipRepository;
     @Autowired
     private DietRepository dietRepository;
+    @Autowired
+    private LogRepository logRepository;
+    @Autowired
+    private PasswordEncoder encoder;
 
 
     @GetMapping("/api/profile")
@@ -48,7 +54,23 @@ public class MyAPIControllerAdv {
         CUserDetails fetchedUser = (CUserDetails) authentication.getPrincipal();
         System.out.println(authentication.getPrincipal().toString());
 
+        logRepository.save(new Log("Controller","Success","Pozytywnie przetwożono zapytanie","BRAK","BRAK"));
         return new ResponseEntity<>(fetchedUser.getAccount().getDetails(), HttpStatus.OK);
+    }
+
+    @PostMapping("/api/Register")
+    public ResponseEntity<Account> registerUser(@RequestBody LoginModel register) {
+
+        Address aTemp = new Address("NIE PODANO", "NIE PODANO", "NIE PODANO", "NIE PODANO", "NIE PODANO", "NIE PODANO");
+        addressRepository.save(aTemp);
+
+        Person pTemp = new Person("NIE PODANO", "NIE PODANO", "NIE PODANO", "NIE PODANO", aTemp);
+        personRepository.save(pTemp);
+
+        Account acTemp = new Account(register.getInUsername(), encoder.encode(register.getInPassword()), "ROLE_USER", pTemp);
+        accountRepository.save(acTemp);
+
+        return new ResponseEntity<>(acTemp, HttpStatus.OK);
     }
 
     @GetMapping("/api/All/{id}")
