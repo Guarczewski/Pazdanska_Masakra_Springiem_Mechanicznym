@@ -5,15 +5,12 @@ import com.example.springwithsql.Database.Repository.LogRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.CrossOrigin;
-import org.springframework.web.bind.annotation.GetMapping;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
 @RestController
-@CrossOrigin
+@CrossOrigin("*")
 public class LogController {
 
     @Autowired
@@ -42,31 +39,33 @@ public class LogController {
     }
 
     @GetMapping("/api/Log/{logHeader}/{logUserRole}/{logUser}/")
-    public ResponseEntity<List<Log>> getLogByRoleAndUser(String logHeader, String logUserRole, String logUser) {
-
+    public ResponseEntity<List<Log>> getLogByRoleAndUser(@PathVariable String logHeader,@PathVariable String logUserRole,@PathVariable String logUser) {
+        System.out.println(logHeader);
+        System.out.println(logUserRole);
+        System.out.println(logUser);
         // All filters on
-        if (logUserRole != null && logUser != null && logHeader != null)
+        if (logUserRole != "" && logUser != "" && logHeader != "")
             return new ResponseEntity<>(logRepository.findAllByLogUserAndLogUserRoleAndLogHeader(logUser, logUserRole, logHeader), HttpStatus.OK);
 
-        // User and Header
-        else if (logUser != null && logHeader != null)
+            // User and Header
+        else if (logUser != "" && logHeader != "")
             return new ResponseEntity<>(logRepository.findAllByLogUserAndLogHeader(logUser, logHeader), HttpStatus.OK);
 
-        // User and Role
-        else if (logUser != null && logUserRole != null)
+            // User and Role
+        else if (logUser != "" && logUserRole != "")
             return new ResponseEntity<>(logRepository.findAllByLogUserAndLogUserRole(logUser, logUserRole), HttpStatus.OK);
 
-        // Role and Header
-        else if (logUserRole != null && logHeader != null)
+            // Role and Header
+        else if (logUserRole != "" && logHeader != "")
             return new ResponseEntity<>(logRepository.findAllByLogUserRoleAndLogHeader(logUserRole, logHeader), HttpStatus.OK);
 
-        else if (logUser != null)
+        else if (logUser != "")
             return new ResponseEntity<>(logRepository.findAllByLogUser(logUser), HttpStatus.OK);
 
-        else if (logHeader != null)
+        else if (logHeader != "")
             return new ResponseEntity<>(logRepository.findAllByLogHeader(logHeader), HttpStatus.OK);
 
-        else if (logUserRole != null)
+        else if (logUserRole != "")
             return new ResponseEntity<>(logRepository.findAllByLogUserRole(logUserRole), HttpStatus.OK);
 
         return new ResponseEntity<>(logRepository.findAll(), HttpStatus.OK);
