@@ -8,6 +8,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Objects;
 
 @RestController
 @CrossOrigin("*")
@@ -43,29 +44,34 @@ public class LogController {
         System.out.println(logHeader);
         System.out.println(logUserRole);
         System.out.println(logUser);
+
+        System.out.println(logHeader == "NONE");
+        System.out.println(Objects.equals(logHeader, "NONE"));
+
+
         // All filters on
-        if (logUserRole != "" && logUser != "" && logHeader != "")
+        if (!Objects.equals(logUserRole, "NONE") && !Objects.equals(logUser, "NONE") && !Objects.equals(logHeader, "NONE"))
             return new ResponseEntity<>(logRepository.findAllByLogUserAndLogUserRoleAndLogHeader(logUser, logUserRole, logHeader), HttpStatus.OK);
 
             // User and Header
-        else if (logUser != "" && logHeader != "")
+        else if (!Objects.equals(logUser, "NONE") && !Objects.equals(logHeader, "NONE"))
             return new ResponseEntity<>(logRepository.findAllByLogUserAndLogHeader(logUser, logHeader), HttpStatus.OK);
 
             // User and Role
-        else if (logUser != "" && logUserRole != "")
+        else if (!Objects.equals(logUser, "NONE") && !Objects.equals(logUserRole, "NONE"))
             return new ResponseEntity<>(logRepository.findAllByLogUserAndLogUserRole(logUser, logUserRole), HttpStatus.OK);
 
             // Role and Header
-        else if (logUserRole != "" && logHeader != "")
+        else if (!Objects.equals(logUserRole, "NONE") && !Objects.equals(logHeader, "NONE"))
             return new ResponseEntity<>(logRepository.findAllByLogUserRoleAndLogHeader(logUserRole, logHeader), HttpStatus.OK);
 
-        else if (logUser != "")
+        else if (!Objects.equals(logUser, "NONE"))
             return new ResponseEntity<>(logRepository.findAllByLogUser(logUser), HttpStatus.OK);
 
-        else if (logHeader != "")
+        else if (!Objects.equals(logHeader, "NONE"))
             return new ResponseEntity<>(logRepository.findAllByLogHeader(logHeader), HttpStatus.OK);
 
-        else if (logUserRole != "")
+        else if (!Objects.equals(logUserRole, "NONE"))
             return new ResponseEntity<>(logRepository.findAllByLogUserRole(logUserRole), HttpStatus.OK);
 
         return new ResponseEntity<>(logRepository.findAll(), HttpStatus.OK);
